@@ -36,6 +36,9 @@ type MonacoCodeExcerptProps = {
   highlightedStartLine: number
   highlightedEndLine: number
   language: string
+  /** Overrides the plain light/dark theme `colorize()` uses — pass the caller's own resolved
+   *  Monaco theme name (e.g. a terminal-aligned one) to keep this excerpt in sync with it. */
+  themeName?: string
 }
 
 export default function MonacoCodeExcerpt({
@@ -43,7 +46,8 @@ export default function MonacoCodeExcerpt({
   firstLineNumber,
   highlightedStartLine,
   highlightedEndLine,
-  language
+  language,
+  themeName
 }: MonacoCodeExcerptProps): React.JSX.Element {
   const settings = useAppStore((s) => s.settings)
   const editorFontZoomLevel = useAppStore((s) => s.editorFontZoomLevel)
@@ -57,8 +61,8 @@ export default function MonacoCodeExcerpt({
   const [htmlLines, setHtmlLines] = useState<string[]>(() => lines.map(() => ''))
 
   useEffect(() => {
-    monaco.editor.setTheme(isDark ? 'vs-dark' : 'vs')
-  }, [isDark])
+    monaco.editor.setTheme(themeName ?? (isDark ? 'vs-dark' : 'vs'))
+  }, [isDark, themeName])
 
   useEffect(() => {
     if (lines.length === 0) {

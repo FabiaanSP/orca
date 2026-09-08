@@ -8658,7 +8658,9 @@
           "match_dark_mode": "Match dark mode",
           "match_dark_mode_description": "Share the dark terminal theme and divider color in light mode.",
           "light_preview_description": "Shows the effective light terminal appearance.",
-          "dark_preview_description": "Shows the effective dark terminal appearance."
+          "dark_preview_description": "Shows the effective dark terminal appearance.",
+          "editor_theme_matches_terminal": "Match Editor Theme",
+          "editor_theme_matches_terminal_description": "Color the file editor and diff viewer using the active terminal theme instead of the default light/dark editor theme."
         },
         "TerminalWindowSection": {
           "1705318506": "ANSI magenta color",
