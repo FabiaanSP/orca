@@ -8,6 +8,12 @@ function stripHash(color: string): string {
   return color.startsWith('#') ? color.slice(1) : color
 }
 
+/** Monaco's `defineTheme` requires `/^[a-z0-9-]+$/i` — terminal theme names (built-in labels with
+ *  spaces, or `custom:<uuid>` selections) don't qualify, so collapse anything else to `-`. */
+function slugifyThemeName(themeName: string): string {
+  return themeName.replace(/[^a-z0-9-]/gi, '-')
+}
+
 /** Approximate token→ANSI-color mapping; there's no semantic link between a 16-color terminal
  *  palette and syntax categories, so this follows the same convention other terminal-theme-to-editor
  *  converters use (comments dim, strings green, keywords/tags red-ish, etc.). */
@@ -52,7 +58,7 @@ export function ensureMonacoTerminalAlignedTheme(
   themeName: string,
   theme: ITheme
 ): string {
-  const monacoThemeName = `${THEME_NAME_PREFIX}${themeName}`
+  const monacoThemeName = `${THEME_NAME_PREFIX}${slugifyThemeName(themeName)}`
   const base = isTerminalBackgroundLight(theme.background) ? 'vs' : 'vs-dark'
   monaco.editor.defineTheme(monacoThemeName, {
     base,
