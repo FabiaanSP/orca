@@ -6,6 +6,7 @@ import type { MarkdownDocument } from '../../../../shared/filesystem-entry-types
 import { useAppStore } from '@/store'
 import '@/lib/monaco-setup'
 import { computeEditorFontSize, resolveEditorFontFamily } from '@/lib/editor-font-zoom'
+import { resolveDocumentTheme } from '@/lib/document-theme'
 import { useMonacoTerminalAlignedTheme } from './use-monaco-terminal-aligned-theme'
 
 import { useContextualCopySetup } from './useContextualCopySetup'
@@ -115,9 +116,7 @@ export default function MonacoEditor({
   const [gutterMenuOpen, setGutterMenuOpen] = useState(false)
   const [gutterMenuPoint, setGutterMenuPoint] = useState({ x: 0, y: 0 })
   const [gutterMenuLine, setGutterMenuLine] = useState(1)
-  const isDark =
-    settings?.theme === 'dark' ||
-    (settings?.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const isDark = resolveDocumentTheme(settings?.theme ?? 'system')
   const monacoThemeName = useMonacoTerminalAlignedTheme(settings, isDark)
 
   const { queueReveal, cancelScheduledReveal, clearTransientRevealHighlight } =

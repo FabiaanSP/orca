@@ -8,7 +8,7 @@ export type DiffSectionItemProps = {
   index: number
   isBranchMode: boolean
   sideBySide: boolean
-  isDark: boolean
+  monacoThemeName: string
   settings: {
     terminalFontSize?: number
     terminalFontFamily?: string

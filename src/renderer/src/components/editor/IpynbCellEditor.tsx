@@ -115,7 +115,6 @@ function IpynbCodeCellEditor({
           highlightedStartLine={-1}
           highlightedEndLine={-1}
           language={cell.language}
-          themeName={monacoThemeName}
         />
       </div>
     )

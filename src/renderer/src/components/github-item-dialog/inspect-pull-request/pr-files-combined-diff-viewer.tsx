@@ -9,6 +9,8 @@ import type { DiffSection } from '@/components/editor/diff-section-types'
 import { getCombinedDiffBranchEntriesInTreeOrder } from '../../editor/combined-diff/browse-files/combined-diff-file-tree-filter'
 import type { CombinedDiffFileTreeEntry } from '../../editor/combined-diff/resolve-changes/combined-diff-section-identity'
 import { useAppStore } from '@/store'
+import { resolveDocumentTheme } from '@/lib/document-theme'
+import { useMonacoTerminalAlignedTheme } from '@/components/editor/use-monaco-terminal-aligned-theme'
 import type { GitBranchChangeEntry } from '../../../../../shared/git-diff-compare-types'
 import { isPRFileViewed } from '@/components/github/pr-file-content-size'
 import {
@@ -92,9 +94,8 @@ function PRFilesCombinedDiffSections({
   setFileTreeCollapsed
 }: PRFilesCombinedDiffSectionsProps): React.JSX.Element {
   const settings = useAppStore((s) => s.settings)
-  const isDark =
-    settings?.theme === 'dark' ||
-    (settings?.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const isDark = resolveDocumentTheme(settings?.theme ?? 'system')
+  const monacoThemeName = useMonacoTerminalAlignedTheme(settings, isDark)
   // Why: this subtree is keyed by the diff signature, so its file set is fixed for the
   // mount. Freezing it in state keeps a stable identity without caching through a ref.
   const [entries] = useState<GitBranchChangeEntry[]>(() =>
@@ -352,7 +353,7 @@ function PRFilesCombinedDiffSections({
       scrollContainerRef={scrollContainerRef}
       virtualizer={virtualizer}
       sections={sections}
-      isDark={isDark}
+      monacoThemeName={monacoThemeName}
       settings={settings}
       sectionHeights={sectionHeights}
       inlineReviewComments={inlineReviewComments}

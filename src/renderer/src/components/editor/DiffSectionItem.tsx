@@ -29,7 +29,7 @@ export function DiffSectionItem({
   index,
   isBranchMode,
   sideBySide,
-  isDark,
+  monacoThemeName,
   settings,
   sectionHeight,
   worktreeId,
@@ -367,7 +367,7 @@ export function DiffSectionItem({
           addLineCommentLabel={addLineCommentLabel}
           isBranchMode={isBranchMode}
           sideBySide={sideBySide}
-          isDark={isDark}
+          monacoThemeName={monacoThemeName}
           language={language}
           modelPathBase={modelPathBase}
           isEditable={isEditable}

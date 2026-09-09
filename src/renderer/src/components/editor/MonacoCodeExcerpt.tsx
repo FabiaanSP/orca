@@ -4,6 +4,7 @@ import { computeEditorFontSize, resolveEditorFontFamily } from '@/lib/editor-fon
 import { resolveDocumentTheme } from '@/lib/document-theme'
 import { useAppStore } from '@/store'
 import { cn } from '@/lib/utils'
+import { useMonacoTerminalAlignedTheme } from './use-monaco-terminal-aligned-theme'
 
 let pythonLanguageRegistrationPromise: Promise<void> | null = null
 
@@ -36,9 +37,6 @@ type MonacoCodeExcerptProps = {
   highlightedStartLine: number
   highlightedEndLine: number
   language: string
-  /** Overrides the plain light/dark theme `colorize()` uses — pass the caller's own resolved
-   *  Monaco theme name (e.g. a terminal-aligned one) to keep this excerpt in sync with it. */
-  themeName?: string
 }
 
 export default function MonacoCodeExcerpt({
@@ -46,8 +44,7 @@ export default function MonacoCodeExcerpt({
   firstLineNumber,
   highlightedStartLine,
   highlightedEndLine,
-  language,
-  themeName
+  language
 }: MonacoCodeExcerptProps): React.JSX.Element {
   const settings = useAppStore((s) => s.settings)
   const editorFontZoomLevel = useAppStore((s) => s.editorFontZoomLevel)
@@ -57,12 +54,16 @@ export default function MonacoCodeExcerpt({
   )
   const fontFamily = resolveEditorFontFamily(settings)
   const isDark = resolveDocumentTheme(settings?.theme ?? 'system')
+  // Owns its own theme resolution (rather than trusting callers to pass one) so every
+  // excerpt — including ones a future caller forgets to wire up — stays in sync with the
+  // single global Monaco theme registry instead of silently reverting other open surfaces.
+  const monacoThemeName = useMonacoTerminalAlignedTheme(settings, isDark)
   const code = useMemo(() => lines.join('\n'), [lines])
   const [htmlLines, setHtmlLines] = useState<string[]>(() => lines.map(() => ''))
 
   useEffect(() => {
-    monaco.editor.setTheme(themeName ?? (isDark ? 'vs-dark' : 'vs'))
-  }, [isDark, themeName])
+    monaco.editor.setTheme(monacoThemeName)
+  }, [monacoThemeName])
 
   useEffect(() => {
     if (lines.length === 0) {

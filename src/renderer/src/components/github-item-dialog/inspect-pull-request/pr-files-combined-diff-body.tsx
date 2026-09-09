@@ -31,7 +31,7 @@ export function PRFilesCombinedDiffBody({
   scrollContainerRef,
   virtualizer,
   sections,
-  isDark,
+  monacoThemeName,
   settings,
   sectionHeights,
   inlineReviewComments,
@@ -65,7 +65,7 @@ export function PRFilesCombinedDiffBody({
   scrollContainerRef: React.RefObject<HTMLDivElement | null>
   virtualizer: Virtualizer<HTMLDivElement, Element>
   sections: DiffSection[]
-  isDark: boolean
+  monacoThemeName: string
   settings: DiffSectionItemProps['settings']
   sectionHeights: Record<number, number>
   inlineReviewComments: DecoratedDiffComment[]
@@ -128,7 +128,7 @@ export function PRFilesCombinedDiffBody({
                     index={virtualItem.index}
                     isBranchMode={false}
                     sideBySide={sideBySide}
-                    isDark={isDark}
+                    monacoThemeName={monacoThemeName}
                     settings={settings}
                     sectionHeight={sectionHeights[virtualItem.index]}
                     worktreeId={`github-pr:${repoId}:${prNumber}`}

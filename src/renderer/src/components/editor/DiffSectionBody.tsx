@@ -35,7 +35,7 @@ type DiffSectionBodyProps = {
   addLineCommentLabel?: string
   isBranchMode: boolean
   sideBySide: boolean
-  isDark: boolean
+  monacoThemeName: string
   language: string
   modelPathBase: string
   isEditable: boolean
@@ -62,7 +62,7 @@ export function DiffSectionBody({
   addLineCommentLabel,
   isBranchMode,
   sideBySide,
-  isDark,
+  monacoThemeName,
   language,
   modelPathBase,
   isEditable,
@@ -195,7 +195,7 @@ export function DiffSectionBody({
           language={language}
           original={section.originalContent}
           modified={section.modifiedContent}
-          theme={isDark ? 'vs-dark' : 'vs'}
+          theme={monacoThemeName}
           onMount={handleEditorMount}
           // Why: @monaco-editor/react can dispose models before widget teardown.
           // Keep them through unmount and dispose unattached models next tick.

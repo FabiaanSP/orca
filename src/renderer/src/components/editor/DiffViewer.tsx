@@ -5,6 +5,7 @@ import { useAppStore } from '@/store'
 import { diffViewStateCache, setWithLRU } from '@/lib/scroll-cache'
 import { monaco } from '@/lib/monaco-setup'
 import { computeDiffEditorFontSize, resolveEditorFontFamily } from '@/lib/editor-font-zoom'
+import { resolveDocumentTheme } from '@/lib/document-theme'
 import { useMonacoTerminalAlignedTheme } from './use-monaco-terminal-aligned-theme'
 import { useContextualCopySetup } from './useContextualCopySetup'
 import { selectWorktreeDiffComments } from '@/store/worktree-diff-comments-selector'
@@ -68,9 +69,7 @@ export default function DiffViewer({
   )
   const terminalFontSize = settings?.terminalFontSize ?? 13
   const diffEditorFontSize = computeDiffEditorFontSize(terminalFontSize, editorFontZoomLevel)
-  const isDark =
-    settings?.theme === 'dark' ||
-    (settings?.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const isDark = resolveDocumentTheme(settings?.theme ?? 'system')
   const monacoThemeName = useMonacoTerminalAlignedTheme(settings, isDark)
 
   const diffEditorRef = useRef<editor.IStandaloneDiffEditor | null>(null)

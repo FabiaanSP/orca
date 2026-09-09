@@ -3,6 +3,8 @@ import { useAppStore } from '@/store'
 import { createProgrammaticScrollMarks } from '@/hooks/programmatic-scroll-marks'
 import { useWorkspaceFileBrowserActionPredicate } from '@/lib/file-preview'
 import { selectWorktreeDiffCommentsOrEmpty } from '@/store/worktree-diff-comments-selector'
+import { resolveDocumentTheme } from '@/lib/document-theme'
+import { useMonacoTerminalAlignedTheme } from '@/components/editor/use-monaco-terminal-aligned-theme'
 import type { OpenFile } from '@/store/slices/editor'
 import '@/lib/monaco-setup'
 import type { DiffSection } from '../diff-section-types'
@@ -64,9 +66,8 @@ export default function CombinedDiffViewer({
   )
   const activeGroupId = useAppStore((s) => s.activeGroupIdByWorktree[file.worktreeId])
   const canOpenWorkspaceFileBrowserForPath = useWorkspaceFileBrowserActionPredicate(file.worktreeId)
-  const isDark =
-    settings?.theme === 'dark' ||
-    (settings?.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  const isDark = resolveDocumentTheme(settings?.theme ?? 'system')
+  const monacoThemeName = useMonacoTerminalAlignedTheme(settings, isDark)
 
   const [sections, setSections] = useState<DiffSection[]>([])
   const [sectionHeights, setSectionHeights] = useState<Record<number, number>>({})
@@ -365,7 +366,7 @@ export default function CombinedDiffViewer({
             isAllMode={entrySet.isAllMode}
             isBranchMode={entrySet.isBranchMode}
             isCommitMode={entrySet.isCommitMode}
-            isDark={isDark}
+            monacoThemeName={monacoThemeName}
             loadSection={loadSection}
             loadDeferredSection={loadDeferredSection}
             markDirectScrollInput={markDirectScrollInput}
